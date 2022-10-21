@@ -14,26 +14,6 @@ function __sakana_git_branch_name
   echo -n "$red git$dkgrey:$blue$branch$normal "
 end
 
-function __sakana_git_ahead
-  set -l commits (command git rev-list --count --left-right "@{upstream}...HEAD" 2>/dev/null)
-  switch "$commits"
-  case ""
-    # No upstream
-  case "0"\t"0"
-    # Even with upstream
-  case "*"\t"0"
-    set -l count (echo $commits | cut -f 1)
-    echo -n " $count commits behind"
-  case "0"\t"*"
-    set -l count (echo $commits | cut -f 2)
-    echo -n " $count commits ahead"
-  case "*"
-    set -l behind (echo $commits | cut -f 1)
-    set -l ahead  (echo $commits | cut -f 2)
-    echo -n " $behind commit behind, $ahead ahead"
-  end
-end
-
 function __sakana_git_branch_state
   # Create an empty array to store our icons
   set -l icons ()
@@ -65,10 +45,7 @@ function __sakana_git_branch_state
     echo -n " $icon"
   end
 
-  echo -n " $ltgrey]$dkgrey"
-
-  # Check if the branch is ahead, behind, or diverged of remote
-  __sakana_git_ahead
+  echo -n " $ltgrey]"
 end
 
 
@@ -85,6 +62,9 @@ function fish_prompt
 
     __sakana_git_branch_name
     __sakana_git_branch_state
+
+    echo -n "$dkgrey "
+    git_ahead
   end
 
   echo
