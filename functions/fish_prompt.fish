@@ -79,9 +79,8 @@ function fish_prompt
 
   # Rust integration
   if test -e "Cargo.toml"
-    set -l _version  (rustc --version | cut -d " " -f 2)
-    set -l rustc     (echo $_version  | cut -d "-" -f 1)
-    set -l toolchain (echo $_version  | cut -d "-" -f 2)
+    set -l rustc     (rustc --version | cut -d " " -f 2 | cut -d "-" -f 1)
+    set -l toolchain (rustup show active-toolchain | cut -d " " -f 1 | cut -d "-" -f 1)
 
     echo -n "🦀 $orange$toolchain$dkgrey@$ltgrey$rustc "
   end
