@@ -10,7 +10,10 @@ set red    (set_color E06C75)
 
 
 function __sakana_git_branch_name
-  set -l branch (command git symbolic-ref --quiet --short HEAD 2>/dev/null; or command git show-ref --head -s --abbrev | head -n1 2>/dev/null)
+  set -l branch (
+    command git symbolic-ref --quiet --short HEAD 2>/dev/null; \
+      or command git show-ref --head -s --abbrev | head -n1 2>/dev/null
+  )
   echo -n "$red git$dkgrey:$blue$branch$normal "
 end
 
@@ -63,8 +66,8 @@ function fish_prompt
     __sakana_git_branch_name
     __sakana_git_branch_state
 
-    echo -n "$dkgrey "
-    git_ahead
+    set -l ahead (git_ahead)
+    echo -n "$dkgrey $ahead"
   end
 
   echo
